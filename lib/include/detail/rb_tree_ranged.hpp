@@ -28,10 +28,10 @@ struct rb_tree_ranged_node_base_ {
   using size_type = std::size_t;
 
   rb_tree_ranged_color_ m_color_;
-  size_type m_size_;
-  base_ptr_ m_left_;
-  base_ptr_ m_right_;
-  base_ptr_ m_parent_;
+  size_type             m_size_;
+  base_ptr_             m_left_;
+  base_ptr_             m_right_;
+  base_ptr_             m_parent_;
 
   static rb_tree_ranged_color_ get_color_(const_base_ptr_ p_x) { return (p_x ? p_x->m_color_ : k_black_); }
 
@@ -82,8 +82,7 @@ struct rb_tree_ranged_node_base_ {
   bool is_right_child_() const noexcept { return (this == m_parent_->m_right_); }
 
   bool is_linear() noexcept {
-    return ((is_left_child_() && m_parent_->is_left_child_()) ||
-            (is_right_child_() && m_parent_->is_right_child_()));
+    return ((is_left_child_() && m_parent_->is_left_child_()) || (is_right_child_() && m_parent_->is_right_child_()));
   }
 };
 
@@ -133,9 +132,9 @@ private:
   using const_self_type_ = const self_type_;
 
 public:
-  bool empty() const noexcept { return !m_root_; }
+  bool      empty() const noexcept { return !m_root_; }
   size_type size() const noexcept { return (m_root_ ? m_root_->m_size_ : 0); }
-  bool contains(const t_value_type &p_key) const noexcept { return bst_lookup(p_key); }
+  bool      contains(const t_value_type &p_key) const noexcept { return bst_lookup(p_key); }
 
 private:
   void prune_leaf(node_ptr_ p_n) {
@@ -152,10 +151,12 @@ private:
 
   template <typename F>
   std::tuple<node_ptr_, node_ptr_, bool> traverse_binary_search(node_ptr_ p_r, const t_value_type &p_key, F p_f) {
-    if (!p_r) { return std::make_tuple(nullptr, nullptr, false); }
+    if (!p_r) {
+      return std::make_tuple(nullptr, nullptr, false);
+    }
 
     node_ptr_ prev = nullptr;
-    bool is_less_than_key{};
+    bool      is_less_than_key{};
 
     while (p_r && (p_r->m_value_ != p_key)) {
       is_less_than_key = t_comp{}(p_r->m_value_, p_key);
@@ -172,12 +173,14 @@ private:
   }
 
   template <typename F>
-  std::tuple<const_node_ptr_, const_node_ptr_, bool> traverse_binary_search(const_node_ptr_ p_r,
+  std::tuple<const_node_ptr_, const_node_ptr_, bool> traverse_binary_search(const_node_ptr_     p_r,
                                                                             const t_value_type &p_key, F p_f) const {
-    if (!p_r) { return std::make_tuple(nullptr, nullptr, false); }
+    if (!p_r) {
+      return std::make_tuple(nullptr, nullptr, false);
+    }
 
     const_node_ptr_ prev = nullptr;
-    bool is_less_than_key{};
+    bool            is_less_than_key{};
 
     while (p_r && (p_r->m_value_ != p_key)) {
       is_less_than_key = t_comp{}(p_r->m_value_, p_key);
@@ -318,8 +321,7 @@ private:
     return node;
   }
 
-  template <typename t_iter>
-  void insert_range(t_iter p_start, t_iter p_finish) {
+  template <typename t_iter> void insert_range(t_iter p_start, t_iter p_finish) {
     for (t_iter its = p_start, ite = p_finish; its != ite; ++its) {
       insert(*its);
     }
@@ -414,7 +416,7 @@ public:
     if (p_rank > size() || !(p_rank > 0)) throw std::out_of_range("Rank is greater than size or is zero");
 
     const_base_ptr_ curr = m_root_;
-    size_type r = link_type_::size(curr->m_left_) + 1;
+    size_type       r = link_type_::size(curr->m_left_) + 1;
     while (r != p_rank) {
       if (p_rank < r) {
         curr = curr->m_left_;
@@ -475,7 +477,9 @@ public:
   }
 
   self_type_ &operator=(self_type_ &&p_rhs) noexcept {
-    if (this != &p_rhs) { std::swap(m_root_, p_rhs.m_root_); }
+    if (this != &p_rhs) {
+      std::swap(m_root_, p_rhs.m_root_);
+    }
     return *this;
   }
 };

@@ -22,7 +22,9 @@ using base_node_ptr = rb_tree_ranged_node_base_ *;
 using base_node = rb_tree_ranged_node_base_;
 
 std::pair<std::size_t, bool> validate_red_black_helper(base_node_ptr p_base) {
-  if (!p_base) { return {1, true}; }
+  if (!p_base) {
+    return {1, true};
+  }
 
   if (base_node::get_color_(p_base) == k_red_ &&
       (base_node::get_color_(p_base->m_left_) == k_red_ || base_node::get_color_(p_base->m_right_) == k_red_)) {
@@ -40,7 +42,9 @@ std::pair<std::size_t, bool> validate_red_black_helper(base_node_ptr p_base) {
 }
 
 bool validate_size_helper(base_node_ptr p_base) {
-  if (!p_base) { return {true}; }
+  if (!p_base) {
+    return {true};
+  }
 
   if (base_node::size(p_base) != base_node::size(p_base->m_left_) + base_node::size(p_base->m_right_) + 1) {
     return false;
@@ -66,11 +70,13 @@ TEST(test_rb_tree_private, test_1) {
 
 TEST(test_rb_tree_private, test_2) {
   rb_tree_ranged_<int, std::less<int>> t;
-  bool thrown = false;
+  bool                                 thrown = false;
 
   EXPECT_NO_THROW(for (int i = 0; i < 65536; i++) {
     int temp = std::rand();
-    if (!t.contains(temp)) { t.insert(temp); }
+    if (!t.contains(temp)) {
+      t.insert(temp);
+    }
   });
 
   EXPECT_EQ(validate_size_helper(t.m_root_), true);

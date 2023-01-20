@@ -16,9 +16,7 @@ namespace throttle {
 template <typename T, typename t_comp = std::less<T>>
 class order_statistic_set : public detail::rb_tree_ranged_<T, t_comp> {
 public:
-  order_statistic_set() : detail::rb_tree_ranged_<T, t_comp>{} {
-
-  }
+  order_statistic_set() : detail::rb_tree_ranged_<T, t_comp>{} {}
 
   order_statistic_set(std::initializer_list<T> p_list) : detail::rb_tree_ranged_<T, t_comp>{} {
     this->insert_range(p_list.begin(), p_list.end());

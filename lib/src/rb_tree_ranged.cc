@@ -23,7 +23,9 @@ void rb_tree_ranged_impl_::rotate_left_(base_ptr_ p_n) noexcept {
 
   base_ptr_ root = p_n, rchild = p_n->m_right_;
   root->m_right_ = rchild->m_left_;
-  if (rchild->m_left_) { rchild->m_left_->m_parent_ = root; }
+  if (rchild->m_left_) {
+    rchild->m_left_->m_parent_ = root;
+  }
 
   rchild->m_parent_ = root->m_parent_;
 
@@ -48,7 +50,9 @@ void rb_tree_ranged_impl_::rotate_right_(base_ptr_ p_n) noexcept {
 
   base_ptr_ root = p_n, lchild = p_n->m_left_;
   root->m_left_ = lchild->m_right_;
-  if (lchild->m_right_) { lchild->m_right_->m_parent_ = root; }
+  if (lchild->m_right_) {
+    lchild->m_right_->m_parent_ = root;
+  }
 
   lchild->m_parent_ = root->m_parent_;
 
@@ -76,10 +80,14 @@ void rb_tree_ranged_impl_::rotate_to_parent_(base_ptr_ p_n) noexcept {
 }
 
 void rb_tree_ranged_impl_::rebalance_after_insert_(base_ptr_ p_node) noexcept {
-  if (!p_node->m_parent_ || !p_node->m_parent_->m_parent_) { return; }
+  if (!p_node->m_parent_ || !p_node->m_parent_->m_parent_) {
+    return;
+  }
 
   while (link_type_::get_color_(p_node->m_parent_) == k_red_) {
-    if (p_node == m_root_ || (p_node->m_parent_ && p_node->m_parent_->m_color_ == k_black_)) { break; }
+    if (p_node == m_root_ || (p_node->m_parent_ && p_node->m_parent_->m_color_ == k_black_)) {
+      break;
+    }
 
     base_ptr_ uncle = p_node->get_uncle_();
     if (link_type_::get_color_(uncle) == k_red_) {
@@ -104,7 +112,9 @@ void rb_tree_ranged_impl_::rebalance_after_insert_(base_ptr_ p_node) noexcept {
 
 void rb_tree_ranged_impl_::rebalance_after_erase_(base_ptr_ p_leaf) noexcept {
   while (link_type_::get_color_(p_leaf) != k_red_) {
-    if (!p_leaf->m_parent_) { break; }
+    if (!p_leaf->m_parent_) {
+      break;
+    }
 
     base_ptr_ sibling = p_leaf->get_sibling_();
     if (link_type_::get_color_(sibling) == k_red_) {
@@ -151,14 +161,14 @@ rb_tree_ranged_impl_::base_ptr_ rb_tree_ranged_impl_::successor_for_erase_(base_
 }
 
 rb_tree_ranged_impl_::base_ptr_ rb_tree_ranged_impl_::predecessor_for_erase_(base_ptr_ p_node) noexcept {
+  p_node->m_size_--;
+  p_node = p_node->m_left_;
+  while (p_node->m_right_) {
     p_node->m_size_--;
-    p_node = p_node->m_left_;
-    while (p_node->m_right_) {
-      p_node->m_size_--;
-      p_node = p_node->m_right_;
-    }
-    return p_node;
+    p_node = p_node->m_right_;
   }
+  return p_node;
+}
 
 } // namespace detail
 } // namespace throttle
